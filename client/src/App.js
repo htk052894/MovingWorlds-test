@@ -1,71 +1,54 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import logo from './logo.svg';
-import increment, { incrementAsync, decrement } from './actions';
-import Counter from './Counter';
-import './App.css';
+import React from "react"
+import jwt_decode from "jwt-decode"
+import { BrowserRouter, Switch, Route } from "react-router-dom"
 
-function App() {
-  const dispatch = useDispatch();
-  const counter = useSelector(state => state.count)
+// Importing app files
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter
-          value={counter}
-          onIncrement={() => dispatch(increment())}
-          onDecrement={() => dispatch(decrement())}
-          onIncrementAsync={() => dispatch(incrementAsync())}
-        />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <div>
-          Learn
-          {" "}
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-          React,
-          </a>
-          {" "}
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-          Redux,
-          </a>
-          {" "}
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-          React Redux
-          </a>
-          {" "}
-          and
-          {" "}
-          <a
-            className="App-link"
-            href="https://redux-saga.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-          Redux Saga
-          </a>
-        </div>
-      </header>
-    </div>
-  );
+import setTokenOnAllRoutes from "./utils/setTokenOnAllRoutes"
+import { setCurrentUser, logOutUser } from "./redux/actions/authActions"
+
+// Importing Custom Components
+
+import Dashboard from "./components/Dashboard"
+import NotFound from "./components/NotFound"
+import Login from "./components/auth/Login"
+import Register from "./components/auth/Register"
+import OpenUrlPage from "./components/home/OpenUrlPage"
+
+// check for existing user session / check for tokens
+
+if (localStorage.jwtToken) {
+  //set auth token header
+  setTokenOnAllRoutes(localStorage.jwtToken)
+  //decode token and get user information
+  const decoded = jwt_decode(localStorage.jwtToken)
+
+  //set user and isAuthenticated
+  setCurrentUser(decoded)
+  // check for expired token
+  const currentTime = Date.now() / 1000
+  if (decoded.exp < currentTime) {
+    // logout user
+    logOutUser()
+    // redirect to login
+    window.location.href = "/"
+  }
 }
 
-export default App;
+function App() {
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Dashboard} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Route path="/:shortUrl" component={OpenUrlPage} />
+          <Route path="" component={NotFound} />
+        </Switch>
+      </BrowserRouter>
+    </div>
+  )
+}
+
+export default App
