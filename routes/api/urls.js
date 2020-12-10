@@ -12,4 +12,7 @@ router.route("/newUrl")
 router.route("/:shortUrl")
     .get(urlsController.shortUrl);
 
+router.route("/generateCode")
+    .post(urlsController.generateShorCode);
+
 module.exports = router;

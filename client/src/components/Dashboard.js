@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom"
 import { logOutUser } from "../redux/actions/authActions"
-import { newUrl, getAllUrls } from "../redux/actions/urlActions"
+import { newUrl, getAllUrls, setCode, generateCode } from "../redux/actions/urlActions"
 
 import { makeStyles } from "@material-ui/core/styles"
 import {
@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "1.5rem",
+    paddingTop: "1.5rem",
   },
   btn: {
     padding: "10px",
@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-function Dashboard({ auth, urls, logOutUser, newUrl, getAllUrls }) {
+function Dashboard({ auth, urls, errors, logOutUser, newUrl, getAllUrls, setCode, generateCode }) {
   const classes = useStyles()
 
   const [url, setUrl] = useState("")
@@ -44,11 +44,11 @@ function Dashboard({ auth, urls, logOutUser, newUrl, getAllUrls }) {
 
   // destructure data from prop
   const { isAuthenticated, user } = auth
-  const { allUrls } = urls
+  const { allUrls, shortCode } = urls
 
   useEffect(() => {
     if (isAuthenticated) {
-      // getAllUrls(user.id)
+      getAllUrls(user.id)
     }    
     //eslint-disable-next-line
   }, [])
@@ -68,10 +68,22 @@ function Dashboard({ auth, urls, logOutUser, newUrl, getAllUrls }) {
     setUrl(e.target.value)
   }
 
+  const handleShortCodeChange = (e) => {
+    e.preventDefault()
+
+    setCode(e.target.value)
+  }
+
   const handleShrinken = (e) => {
     e.preventDefault()
 
-    newUrl({ userId: user.id, fullUrl: url })
+    newUrl({ userId: user.id, fullUrl: url, shortCode: shortCode })
+  }
+
+  const handleGenerateCode = (e) => {
+    e.preventDefault()
+
+    generateCode()
   }
 
   return isAuthenticated ? (
@@ -108,9 +120,54 @@ function Dashboard({ auth, urls, logOutUser, newUrl, getAllUrls }) {
               variant="outlined"
               fullWidth
             />
+            {errors.fullUrl ? (
+              <Typography variant="caption" color="secondary">
+                {errors.fullUrl}
+              </Typography>
+            ) : (
+              ""
+            )}
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  fullWidth
+                  margin="dense"
+                  name="shortCode"
+                  value={shortCode}
+                  onChange={handleShortCodeChange}
+                  label="Input Your ShortCode Here or "
+                  type="text"
+                  variant="outlined"
+                />
+                {errors.shortCode ? (
+                  <Typography variant="caption" color="secondary">
+                    {errors.shortCode}
+                  </Typography>
+                ) : (
+                  ""
+                )}
+              </Grid>
+              <Grid item xs={5}>
+                <Button
+                  size="small"
+                  className={classes.btn}
+                  onClick={handleGenerateCode}                  
+                  fullWidth
+                  >
+                  Generate Short Code
+                </Button>
+              </Grid>
+            </Grid>                        
             <div className={classes.but}>
               <Button
                 size="small"
+                fullWidth
                 className={classes.btn}
                 onClick={handleShrinken}
               >
@@ -132,13 +189,16 @@ Dashboard.propTypes = {
   logOutUser: PropTypes.func.isRequired,
   newUrl: PropTypes.func.isRequired,
   getAllUrls: PropTypes.func.isRequired,
+  setCode: PropTypes.func.isRequired,
+  generateCode: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
   urls: state.urls,
+  errors: state.errors
 })
 
-export default connect(mapStateToProps, { logOutUser, newUrl, getAllUrls })(
+export default connect(mapStateToProps, { logOutUser, newUrl, getAllUrls, setCode, generateCode })(
   Dashboard
 )

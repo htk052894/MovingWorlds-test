@@ -5,6 +5,15 @@ export const newUrl = (payload) => ({
   payload
 });
 
+export const generateCode = () => ({
+  type: types.GENERATE_SHORT_CODE
+});
+
+export const setCode = (code) => ({
+  type: types.SET_SHORT_CODE,
+  code
+});
+
 export const getAllUrls = (userId) => ({
   type: types.GET_ALL_URLS,
   userId

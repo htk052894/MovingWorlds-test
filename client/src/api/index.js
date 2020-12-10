@@ -9,12 +9,16 @@ export default {
         return axios.post("/api/users/login", userData);
     },
     getAllUrls: function (data) {
-        return axios.post("/api/urls/", data);
+        return axios.post("/api/urls", data);
     },
     newUrl: function (data) {
         return axios.post("/api/urls/newUrl", data);
     },
     clickShortCode: function (shortCode) {
-        return axios.get("/api/urls/shortUrl" + shortCode);
+        alert("/api/urls/" + shortCode);
+        return axios.get("/api/urls/" + shortCode);
+    },
+    generateCode: function() {
+        return axios.post("/api/urls/generateCode");
     }
 }
