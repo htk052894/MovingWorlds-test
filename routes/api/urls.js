@@ -4,10 +4,10 @@ const urlsController = require("../../controllers/urlsController");
 const header = passport.authenticate("jwt", { session: false });
 
 router.route("/")
-    .post(header, urlsController.getAllUrls);
+    .post(urlsController.getAllUrls);
 
 router.route("/newUrl")
-    .post(header, urlsController.newUrl);
+    .post(urlsController.newUrl);
 
 router.route("/:shortUrl")
     .get(urlsController.shortUrl);

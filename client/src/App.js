@@ -1,4 +1,5 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { connect } from 'react-redux';
 import jwt_decode from "jwt-decode"
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 
@@ -15,27 +16,28 @@ import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
 import OpenUrlPage from "./components/home/OpenUrlPage"
 
-// check for existing user session / check for tokens
+function App({ setCurrentUser, logOutUser }) {
+  useEffect(() => {
+    // check for existing user session / check for tokens
 
-if (localStorage.jwtToken) {
-  //set auth token header
-  setTokenOnAllRoutes(localStorage.jwtToken)
-  //decode token and get user information
-  const decoded = jwt_decode(localStorage.jwtToken)
+    if (localStorage.jwtToken) {
+      //set auth token header
+      setTokenOnAllRoutes(localStorage.jwtToken)
+      //decode token and get user information
+      const decoded = jwt_decode(localStorage.jwtToken)
 
-  //set user and isAuthenticated
-  setCurrentUser(decoded)
-  // check for expired token
-  const currentTime = Date.now() / 1000
-  if (decoded.exp < currentTime) {
-    // logout user
-    logOutUser()
-    // redirect to login
-    window.location.href = "/"
-  }
-}
-
-function App() {
+      //set user and isAuthenticated
+      setCurrentUser(decoded)
+      // check for expired token
+      const currentTime = Date.now() / 1000
+      if (decoded.exp < currentTime) {
+        // logout user
+        logOutUser()
+        // redirect to login
+        window.location.href = "/"
+      }
+    }
+  }, [setCurrentUser, logOutUser]);
   return (
     <div className="App">
       <BrowserRouter>
@@ -51,4 +53,9 @@ function App() {
   )
 }
 
-export default App
+const mapDispatchToProps = {
+  logOutUser: logOutUser,
+  setCurrentUser: setCurrentUser
+};
+
+export default connect(null, mapDispatchToProps)(App);

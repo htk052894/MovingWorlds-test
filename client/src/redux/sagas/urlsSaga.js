@@ -22,7 +22,7 @@ function* getAllUrls(userId) {
     try {
         const res = yield call(API.getAllUrls, { userId: userId });
         yield put ({
-            type: types.GET_ALL_URLS,
+            type: types.SET_ALL_URLS,
             payload: res.data.allUrls
         })
     }

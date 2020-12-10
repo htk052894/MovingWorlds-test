@@ -6,7 +6,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.GET_ALL_URLS:
+    case types.SET_ALL_URLS:
       return {
         ...state,
         allUrls: action.payload.reverse(),

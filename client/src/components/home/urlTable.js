@@ -1,6 +1,5 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { connect } from "react-redux"
 import { makeStyles, useTheme } from "@material-ui/core/styles"
 import { clickShortCode } from "../../redux/actions/urlActions"
 
@@ -114,7 +113,7 @@ const useStyles2 = makeStyles({
   },
 })
 
-function UrlTable({ urlObjs, clickShortCode }) {
+export default function UrlTable({ urlObjs }) {
   const classes = useStyles2()
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
@@ -205,12 +204,3 @@ function UrlTable({ urlObjs, clickShortCode }) {
     </Container>
   )
 }
-
-
-UrlTable.propTypes = {
-  clickShortCode: PropTypes.func.isRequired
-}
-
-export default connect({ clickShortCode })(
-  UrlTable
-)

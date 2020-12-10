@@ -48,7 +48,7 @@ function Dashboard({ auth, urls, logOutUser, newUrl, getAllUrls }) {
 
   useEffect(() => {
     if (isAuthenticated) {
-      getAllUrls(user.id)
+      // getAllUrls(user.id)
     }    
     //eslint-disable-next-line
   }, [])

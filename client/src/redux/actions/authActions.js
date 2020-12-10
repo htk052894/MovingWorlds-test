@@ -9,9 +9,9 @@ export const logOutUser = () => ({
   type: types.LOGOUT_USER
 });
 
-export const setCurrentUser = (json) => ({
+export const setCurrentUser = (payload) => ({
   type: types.SET_CURRENT_USER,
-  json
+  payload
 });
 
 export const registerUser = (userData) => ({

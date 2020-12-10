@@ -54,8 +54,8 @@ module.exports = {
             // check for user email
 
             if (!user) {
-            errors.emailLogin = "User Not Found"
-            return res.status(404).json(errors)
+                errors.emailLogin = "User Not Found"
+                return res.status(404).json(errors)
             }
 
             // check for password
@@ -71,15 +71,15 @@ module.exports = {
                 // jwt checks for payload and access keys and creates sessions of assigned particular time .
 
                 jwt.sign(
-                payload,
-                keys.secretOrKey,
-                { expiresIn: "2h" },
-                (err, token) => {
-                    res.json({
-                    success: true,
-                    token: "Bearer " + token,
-                    })
-                }
+                    payload,
+                    keys.secretOrKey,
+                    { expiresIn: "2h" },
+                    (err, token) => {
+                        res.json({
+                            success: true,
+                            token: "Bearer " + token,
+                        })
+                    }
                 )
             } else {
                 errors.passwordLogin = "Incorrect Password"

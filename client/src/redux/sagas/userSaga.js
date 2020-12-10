@@ -11,8 +11,10 @@ function* loginUser(userData) {
         localStorage.setItem("jwtToken", token);
         setAuthToken(token);
         const decoded = jwt_decode(token);
-        
-        setCurrentUser(decoded);
+        yield put({
+            type: types.SET_CURRENT_USER,
+            payload: decoded
+        })
     }
     catch (error) {
         yield put({
@@ -26,24 +28,18 @@ function* loginUser(userData) {
 function* logOutUser() {    
     localStorage.removeItem("jwtToken");
     setAuthToken(false);
-    setCurrentUser({});
-}
-
-function* setCurrentUser(decode) {
-    alert("I am checking here saga");
     yield put({
         type: types.SET_CURRENT_USER,
-        payload: decode
+        payload: {}
     })
 }
 
 function* registerUser(userData, history) {
     try {
         yield call(API.registerUser, userData.userData);
-        history.push("/");
         const loginDetail = {
-            email: userData.email,
-            password: userData.password
+            email: userData.userData.email,
+            password: userData.userData.password
         }
         const res = yield call(API.loginUser, loginDetail);
         const { token } = res.data;
@@ -51,12 +47,15 @@ function* registerUser(userData, history) {
         setAuthToken(token);
         const decoded = jwt_decode(token);
         
-        setCurrentUser(decoded);        
+        yield put({
+            type: types.SET_CURRENT_USER,
+            payload: decoded
+        })        
     }
     catch (error) {
         yield put({
             type: types.GET_ERRORS,
-            payload: error.response
+            payload: error.response.data
         })
     }    
 }
@@ -65,5 +64,4 @@ export default function* userSaga() {
     yield takeLatest(types.LOGIN_USER, loginUser)
     yield takeLatest(types.LOGOUT_USER, logOutUser)
     yield takeLatest(types.REGISTER_USER, registerUser)
-    yield takeLatest(types.SET_CURRENT_USER, setCurrentUser);
 }
