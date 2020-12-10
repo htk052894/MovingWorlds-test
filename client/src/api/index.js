@@ -15,7 +15,6 @@ export default {
         return axios.post("/api/urls/newUrl", data);
     },
     clickShortCode: function (shortCode) {
-        alert("/api/urls/" + shortCode);
         return axios.get("/api/urls/" + shortCode);
     },
     generateCode: function() {

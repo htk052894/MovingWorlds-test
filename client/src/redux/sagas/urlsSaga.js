@@ -40,8 +40,7 @@ function* getAllUrls(userId) {
 
 function* clickShortCode(shortCode) {
     try {
-        alert(shortCode);
-        const res = yield call(API.clickShortCode, shortCode);
+        const res = yield call(API.clickShortCode, shortCode.shortCode);
         window.open(res.data.fullUrl, "_blank");
     }
     catch (error) {

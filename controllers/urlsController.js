@@ -41,7 +41,6 @@ module.exports = {
     },
     generateShorCode: function (req, res) {
         db.ShortUrl.find({}).select("short").exec(function(err, codeList){
-            console.log(codeList);
             var isGenerated = false;
             var result           = '';
 
@@ -52,7 +51,6 @@ module.exports = {
                 for ( var i = 0; i < 6; i++ ) {
                     result += characters.charAt(Math.floor(Math.random() * charactersLength));
                 }
-                console.log(result);
                 if (codeList.indexOf(result) < 0) {
                     isGenerated = true;
                 }
@@ -62,12 +60,11 @@ module.exports = {
         })        
     },
     shortUrl: async function (req, res) {
-        console.log("i went here");
         const shortUrl = await db.ShortUrl.findOne({ short: req.params.shortUrl })
         if (shortUrl == null) return res.sendStatus(404)
 
         shortUrl.clicks++
-        shortUrl.updatedAt = Date.now
+        shortUrl.updatedAt = Date.now()
         shortUrl.save()
 
         res.json({ fullUrl: shortUrl.full })
