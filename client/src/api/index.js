@@ -15,9 +15,12 @@ export default {
         return axios.post("/api/urls/newUrl", data);
     },
     clickShortCode: function (shortCode) {
-        return axios.get("/api/urls/" + shortCode);
+        return axios.post("/api/urls/" + shortCode);
     },
     generateCode: function() {
         return axios.post("/api/urls/generateCode");
+    },
+    getStats: function(shortCode) {
+        return axios.get("/api/urls/" + shortCode)
     }
 }

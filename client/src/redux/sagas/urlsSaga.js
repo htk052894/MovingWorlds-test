@@ -67,9 +67,26 @@ function* generateCode() {
     }
 }
 
+function* getStats(shortCode) {
+    try {
+        const res = yield call(API.getStats, shortCode.shortCode);
+        yield put ({
+            type: types.SET_STATS,
+            payload: res.data
+        })
+    }
+    catch (error) {
+        yield put({
+            type: types.GET_ERRORS,
+            payload: error.response.data
+        })
+    }
+}
+
 export default function* urlsSaga() {
     yield takeLatest(types.SEND_NEW_URL, newUrl)
     yield takeLatest(types.CLICK_SHORT_CODE, clickShortCode)
     yield takeLatest(types.GET_ALL_URLS, getAllUrls)
     yield takeLatest(types.GENERATE_SHORT_CODE, generateCode)
+    yield takeLatest(types.GET_STATS, getStats)
 }

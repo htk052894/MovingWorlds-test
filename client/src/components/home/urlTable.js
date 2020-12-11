@@ -137,6 +137,10 @@ export function UrlTable(props) {
     props.clickShortCode(shortUrl)
   }
 
+  const handleStats = (shortUrl) => {
+    window.location.href = "/" + shortUrl + "/stats";
+  }
+
   return (
     <Container maxWidth="md">
       <TableContainer component={Paper}>
@@ -169,7 +173,10 @@ export function UrlTable(props) {
                   </span>
                 </TableCell>
                 <TableCell style={{ width: 160 }} align="center">
-                  <IconButton aria-label="stats">
+                  <IconButton 
+                    aria-label="stats"
+                    onClick={() => handleStats(row.short)}
+                    >
                     <SettingsIcon />
                   </IconButton>
                 </TableCell>

@@ -68,6 +68,10 @@ module.exports = {
         shortUrl.save()
 
         res.json({ fullUrl: shortUrl.full })
+    },
+    getStats: async function (req, res) {
+        const stats = await db.ShortUrl.findOne({ short: req.params.shortCode })
+        res.json(stats)
     }
 }
 

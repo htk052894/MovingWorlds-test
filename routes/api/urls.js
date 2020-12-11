@@ -6,13 +6,16 @@ const header = passport.authenticate("jwt", { session: false });
 router.route("/")
     .post(urlsController.getAllUrls);
 
+router.route("/generateCode")
+    .post(urlsController.generateShorCode);
+
 router.route("/newUrl")
     .post(urlsController.newUrl);
 
 router.route("/:shortUrl")
-    .get(urlsController.shortUrl);
+    .post(urlsController.shortUrl);
 
-router.route("/generateCode")
-    .post(urlsController.generateShorCode);
+router.route("/:shortCode")
+    .get(urlsController.getStats);    
 
 module.exports = router;

@@ -28,3 +28,13 @@ export const clickShortCode = (shortCode) => ({
   type: types.CLICK_SHORT_CODE,
   shortCode
 });
+
+export const getStats = (shortCode) => ({
+  type: types.GET_STATS,
+  shortCode
+});
+
+export const setStats = (payload) => ({
+  type: types.SET_STATS,
+  payload
+})

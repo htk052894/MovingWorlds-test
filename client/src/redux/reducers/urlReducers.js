@@ -2,7 +2,8 @@ import types from "../types"
 
 const initialState = {
   allUrls: [],
-  shortCode: ""
+  shortCode: "",
+  urlStats: null
 }
 
 export default (state = initialState, action) => {
@@ -21,6 +22,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         shortCode: action.code
+      }
+    case types.SET_STATS:
+      return {
+        ...state,
+        urlStats: action.payload
       }
     default:
       return state
